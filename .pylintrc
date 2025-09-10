@@ -1,0 +1,29 @@
+[MESSAGES CONTROL]
+# Enable all messages by default, disable some common noisy ones:
+disable=
+    missing-docstring,
+    invalid-name,
+    too-few-public-methods,
+    too-many-arguments,
+    too-many-locals,
+    too-many-branches,
+    too-many-statements,
+    too-many-instance-attributes
+
+[REPORTS]
+reports=no
+
+[FORMAT]
+max-line-length=120
+
+[DESIGN]
+max-args=7
+
+[BASIC]
+variable-rgx=[a-z_][a-z0-9_]{0,29}$
+
+[TYPECHECK]
+ignored-modules=resource_management.core, resource_management.core.shell, resource_management.core.logger, collections, typing
+
+[SIMILARITIES]
+min-similarity-lines=4
