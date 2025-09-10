@@ -349,16 +349,18 @@ def delete_jceks_file(jceks_path):
     file_name = path.name
     jceks_dot_file = path.parent / ".{}.crc".format(file_name) # type: pathlib.Path
     if destination_type == Netloc.FILE:
-        if running_from_ambari and sudo.path_exists(str(path)):
-            sudo.unlink(str(path))
-            if sudo.path_exists(str(jceks_dot_file)):
-                sudo.unlink(str(jceks_dot_file))
+        path_str = str(path)
+        jceks_dot_file_str = str(jceks_dot_file)
+        if running_from_ambari and sudo.path_exists(path_str):
+            sudo.unlink(path_str)
+            if sudo.path_exists(jceks_dot_file_str):
+                sudo.unlink(jceks_dot_file_str)
 
-        elif path.exists() and os.access(path, os.W_OK):
-            os.remove(path)
-            if jceks_dot_file.exists() and os.access(jceks_dot_file, os.W_OK): # pylint: disable=no-member
-                os.remove(jceks_dot_file)
-        elif path.exists() and not os.access(path, os.W_OK):
+        elif path.exists() and os.access(path_str, os.W_OK):
+            os.remove(path_str)
+            if jceks_dot_file.exists() and os.access(jceks_dot_file_str, os.W_OK): # pylint: disable=no-member
+                os.remove(jceks_dot_file_str)
+        elif path.exists() and not os.access(path_str, os.W_OK):
             log_error("Cannot delete jceks at {} because you don't have write permissions".format(path))
             return False
 
