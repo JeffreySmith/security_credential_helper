@@ -22,11 +22,16 @@ It is compatible with both standalone environments and [Apache Ambari](https://a
 
 Clone this repo and run:
 ```sh
-pip2 install .
+pip install .
+```
+
+Or run:
+```bash
+pip install git+https://github.com/JeffreySmith/security_credential_helper@python3
 ```
 
 **Dependencies:**  
-- Python 2.7 (with [`typing`](https://pypi.org/project/typing/), [`pathlib2`](https://pypi.org/project/pathlib2/), and [`enum34`](https://pypi.org/project/enum34/))
+- Python 3.9 or higher
 - Java (required for Hadoop credential operations)
 - `hadoop` command must be available in `$PATH`
 

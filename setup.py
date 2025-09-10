@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 from setuptools import setup, find_packages
 
 with open("README.md", "r") as f:
@@ -18,16 +18,15 @@ setup(
         "Source": "https://github.com/JeffreySmith/security_credential_helper",
     },
     packages = find_packages(),
-    install_requires = ["typing==3.10.0", "pathlib2==2.3.7.post1", "enum34==1.1.10"],
     entry_points={
         "console_scripts": [
             "security_credential_helper=security_credential_helper:interactive",
         ],
     },
     zip_safe=False,
-    python_requires = ">= 2.7, <3",
+    python_requires = ">= 3.9",
     classifiers=[
-        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
         "Intended Audience :: Developers",
