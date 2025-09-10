@@ -181,7 +181,7 @@ def get_uri_info(uri):
         return None
 
     netloc = Netloc.from_str(parsed.netloc)
-    return (netloc, parsed.path)
+    return (netloc, pathlib.Path(parsed.path))
 
 def build_classpath(directory="/var/lib/ambari-agent/cred/lib", hadoop_conf_dir="/etc/hadoop/conf", *args): # pylint: disable=keyword-arg-before-vararg
     # type: (str, str, *str) -> str
@@ -196,7 +196,7 @@ def build_classpath(directory="/var/lib/ambari-agent/cred/lib", hadoop_conf_dir=
 
     for arg in all_args:
         path = pathlib.PosixPath(arg).resolve() # type: pathlib.PosixPath
-        if not path.exists(): # pylint: disable=no-member
+        if not path.exists():
             log_error("{} does not exist. Cannot continue".format(arg))
             if not running_from_ambari:
                 sys.exit(1)
