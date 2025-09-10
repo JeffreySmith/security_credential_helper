@@ -81,7 +81,7 @@ def log_error(error):
     Logger.error(error)
 
 def _create_folder(netloc, path):
-    # type: (Union[Netloc, None], pathlib.PosixPath) -> bool
+    # type: (Union[Netloc, None], pathlib.Path) -> bool
     if netloc is None:
         return False
     path = path.absolute()
@@ -171,7 +171,7 @@ def run_as_user(user=None):
     return result
 
 def get_uri_info(uri):
-    # type: (str) -> Union[Tuple[Netloc, pathlib.PosixPath], None]
+    # type: (str) -> Union[Tuple[Netloc, pathlib.Path], None]
     """Get the netloc and path from jceks:// path."""
     if not uri:
         return None
@@ -195,14 +195,14 @@ def build_classpath(directory="/var/lib/ambari-agent/cred/lib", hadoop_conf_dir=
     paths = [] # type: List[List[str]]
 
     for arg in all_args:
-        path = pathlib.PosixPath(arg).resolve() # type: pathlib.PosixPath
+        path = pathlib.Path(arg).resolve() # type: pathlib.Path
         if not path.exists():
             log_error("{} does not exist. Cannot continue".format(arg))
             if not running_from_ambari:
                 sys.exit(1)
             else:
                 return ""
-        paths.append(glob.glob(path/"*"))
+        paths.append(glob.glob(str(path/"*")))
     list_of_files = list(itertools.chain.from_iterable(paths)) # type: List[str]
     if not list_of_files:
         log_error("No files found in any directory: {}. Cannot continue".format(args))
@@ -266,13 +266,13 @@ def save_password(path, alias, password, user=None):
         password
     ]
 
-    path_info = get_uri_info(path) # type: Union[Tuple[Netloc, pathlib.PosixPath], None]
+    path_info = get_uri_info(path) # type: Union[Tuple[Netloc, pathlib.Path], None]
     if not path_info:
         return "Path: {} is not a valid path".format(path)
 
     netloc = path_info[0]
-    jceks_path = path_info[1] # type: pathlib.PosixPath
-    jceks_parent = jceks_path.parent # type: pathlib.PosixPath
+    jceks_path = path_info[1] # type: pathlib.Path
+    jceks_parent = jceks_path.parent # type: pathlib.Path
 
     # This will return true if the parent folder already exists, or if we're able to create it
     if not _create_folder(netloc, jceks_parent):
@@ -341,13 +341,13 @@ def revert_env_vars(credstore_password, status=False):
 def delete_jceks_file(jceks_path):
     "Remove a jceks file and its associated .crc file. Returns True on success."
     # type: (str) -> bool
-    result = get_uri_info(jceks_path) # type: Union[Tuple[Netloc, pathlib.PosixPath], None]
+    result = get_uri_info(jceks_path) # type: Union[Tuple[Netloc, pathlib.Path], None]
     if not result:
         return False
     destination_type = result[0] # type: Netloc
-    path = pathlib.PosixPath(result[1])
+    path = pathlib.Path(result[1])
     file_name = path.name
-    jceks_dot_file = path.parent / ".{}.crc".format(file_name) # type: pathlib.PosixPath
+    jceks_dot_file = path.parent / ".{}.crc".format(file_name) # type: pathlib.Path
     if destination_type == Netloc.FILE:
         if running_from_ambari and sudo.path_exists(str(path)):
             sudo.unlink(str(path))
@@ -489,7 +489,7 @@ def interactive():
 
 
     jceks = str(
-        pathlib.PosixPath(args.file).expanduser().resolve()) \
+        pathlib.Path(args.file).expanduser().resolve()) \
     if not args.file.startswith("jceks://") \
     else args.file # type: str
     alias = args.alias
